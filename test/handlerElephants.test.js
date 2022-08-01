@@ -27,7 +27,15 @@ describe('Testes da função HandlerElephants', () => {
     expect(handlerElephants('availability')).toEqual(availability);
   });
 
-  it('Testa se o retorno da função sem argumento', () => {
+  it('Testa se o retorno da função sem argumento é undefined', () => {
     expect(handlerElephants()).toEqual(undefined);
+  });
+
+  it('Testa o retorno da função com um objeto vazio como parâmetro', () => {
+    expect(handlerElephants({})).toEqual('Parâmetro inválido, é necessário uma string');
+  });
+
+  it('Testa se o retorno de um parâmetro não definido retona null', () => {
+    expect(handlerElephants('fandangos')).toEqual(null);
   });
 });
