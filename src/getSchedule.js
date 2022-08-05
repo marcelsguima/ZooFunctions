@@ -1,42 +1,41 @@
+const { hours, species } = require('../data/zoo_data');
 const data = require('../data/zoo_data');
 
-// const fullSchedule = {
-//   Tuesday: {
-//     officeHour: 'Open from 8am until 6pm',
-//     exhibition: ['lions', 'tigers', 'bears', 'penguins', 'elephants', 'giraffes'],
-//   },
-//   Wednesday: {
-//     officeHour: 'Open from 8am until 6pm',
-//     exhibition: ['tigers', 'bears', 'penguins', 'otters', 'frogs', 'giraffes'],
-//   },
-//   Thursday: {
-//     officeHour: 'Open from 10am until 8pm',
-//     exhibition: ['lions', 'otters', 'frogs', 'snakes', 'giraffes'],
-//   },
-//   Friday: {
-//     officeHour: 'Open from 10am until 8pm',
-//     exhibition: ['tigers', 'otters', 'frogs', 'snakes', 'elephants', 'giraffes'],
-//   },
-//   Saturday: {
-//     officeHour: 'Open from 8am until 10pm',
-//     exhibition: [
-//       'lions', 'tigers',
-//       'bears', 'penguins',
-//       'otters', 'frogs',
-//       'snakes', 'elephants',
-//     ],
-//   },
-//   Sunday: {
-//     officeHour: 'Open from 8am until 8pm',
-//     exhibition: ['lions', 'bears', 'penguins', 'snakes', 'elephants'],
-//   },
-//   Monday: { officeHour: 'CLOSED', exhibition: 'The zoo will be closed!' },
-// };
+function getDay(day) {
+  if (day === 'Monday') {
+    return {
+      Monday: { officeHour: 'CLOSED', exhibition: 'The zoo will be closed!' },
+    };
+  }
+  if (Object.keys(hours).includes(day)) {
+    return {
+      [day]: {
+        officeHour: `Open from ${hours[day].open}am until ${hours[day].close}pm`,
+        exhibition: species.filter((animD) => animD
+          .availability.includes(day)).map((animN) => animN.name),
+      },
+    };
+  }
+}
+
+function fullSchedule() {
+  const allDays = Object.keys(hours);
+  return allDays.reduce((acc, obj) => ({ ...acc, ...getDay(obj) }), {});
+}
+
+function getAvailability(animal) {
+  const dWeek = data.species.find((animals) => animals.name === animal);
+  if (dWeek) { return dWeek.availability; }
+}
 
 function getSchedule(scheduleTarget) {
-//   if (!scheduleTarget || ) { return fullSchedule; }
-// }
+  if (getAvailability(scheduleTarget)) { return getAvailability(scheduleTarget); }
+  if (getDay(scheduleTarget)) { return getDay(scheduleTarget); }
+  return fullSchedule();
 }
-// console.log(getSchedule());
+// console.log(species.filter((animD) => animD.availability.includes('Tuesday')));
+// console.log(getAvailability('lions'));
+// console.log(getDay('Tuesday'));
+console.log(getSchedule('banana'));
 
 module.exports = getSchedule;
